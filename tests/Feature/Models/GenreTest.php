@@ -66,7 +66,7 @@ class GenreTest extends TestCase
     public function testUpdate()
     {
         /** @var Genre $genre */
-        $genre = factory(Genre::class)->create()->first();
+        $genre = factory(Genre::class)->create();
         $data = [
             'name' => 'test_name_updated',
             'is_active' => true
@@ -81,12 +81,11 @@ class GenreTest extends TestCase
     }
     public function testDelete()
     {
-        $genre = factory(Genre::class)->create()->first();
+        $genre = factory(Genre::class)->create();
+        $genre->delete();
+        $this->assertNull($genre::find($genre->id));
 
-        Genre::where('id',$genre->id)->delete();
-
-        $res = $genre::find($genre->id);
-
-        $this->assertNull($res);
+        $genre->restore();
+        $this->assertNotNull(Genre::find($genre->id));
     }
 }

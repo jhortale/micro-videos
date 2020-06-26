@@ -82,7 +82,7 @@ class CategoryTest extends TestCase
         /** @var Category $category */
         $category = factory(Category::class)->create([
             'description' => 'test_description'
-        ])->first();
+        ]);
         $data = [
             'name' => 'test_name_updated',
             'description' => 'test_description_updated',
@@ -98,14 +98,11 @@ class CategoryTest extends TestCase
     }
     public function testDelete()
     {
-        $category = factory(Category::class)->create([
-            'description' => 'test_description'
-        ])->first();
+        $category = factory(Category::class)->create();
+        $category->delete();
+        $this->assertNull($category::find($category->id));
 
-        Category::where('id',$category->id)->delete();
-
-        $res = $category::find($category->id);
-
-        $this->assertNull($res);
+        $category->restore();
+        $this->assertNotNull(Category::find($category->id));
     }
 }
